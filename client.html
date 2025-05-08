@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebSocket Client</title>
+</head>
+<body>
+  <h2>WebSocket Client</h2>
+  <input id="inputMsg" type="text" placeholder="Ketik pesan..." />
+  <button onclick="sendMessage()">Kirim</button>
+  <pre id="messages"></pre>
+
+  <script>
+    const socket = new WebSocket('ws://localhost:8080');
+
+socket.onopen = () => console.log('Koneksi WebSocket dibuka');
+socket.onmessage = event => console.log('Dari server:', event.data);
+socket.onerror = event => console.error('Error WebSocket:', event);
+socket.onclose = event => console.log('Koneksi WebSocket ditutup', event);
+
+
+
+    function sendMessage() {
+      const input = document.getElementById('inputMsg');
+      const msg = input.value;
+      if (msg) {
+        socket.send(msg);
+        appendMessage('Anda: ' + msg);
+        input.value = '';
+      }
+    }
+
+    function appendMessage(msg) {
+      const messages = document.getElementById('messages');
+      messages.textContent += msg + '\n';
+    }
+  </script>
+</body>
+</html>
